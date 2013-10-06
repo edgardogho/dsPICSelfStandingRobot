@@ -17,6 +17,9 @@ extern "C" {
 #include <xc.h>
 
 
+    // Defines
+#define OUTPUT 0
+#define INPUT  1
 
 #ifdef	__cplusplus
 }
