@@ -14,6 +14,7 @@ extern "C" {
 
     // <editor-fold defaultstate="collapsed" desc="Function Prototypes">
     void CONFIG_Init(); // </editor-fold>
+    void CONFIG_InitGlobals();
 
 
 

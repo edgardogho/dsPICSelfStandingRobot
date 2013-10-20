@@ -2,7 +2,9 @@
 #include "Config.h"
 
 void CONFIG_Init() {
+    //
     // Setup Oscillator
+    //
     CLKDIVbits.PLLPRE = 0;
     PLLFBD = 41;
     CLKDIVbits.PLLPOST = 0;
@@ -24,11 +26,11 @@ void CONFIG_Init() {
 
     // Pin 6  --> Uart TX  RB2 RP2
     _TRISB2 = OUTPUT;
-    _RP2R = 3; // RP2 to Uart TX
+    _RP2R = 3; // RP2 to Uart1 TX
 
     // Pin 7  <-- Uart RX  RB3 RP3
     _TRISB3 = INPUT;
-     _U1RXR = 3; // Uart1 RX on RP3
+    _U1RXR = 3; // Uart1 RX on RP3
 
 
     //
@@ -64,7 +66,52 @@ void CONFIG_Init() {
     U1STAbits.UTXEN = 1;
 
 
+    //
+    // Setup Timer 1 to interrupt every 1ms
+    //
+    _TCS=0;    // Clock Source Fcy
+    _TCKPS=3;  // Prescaler OFF (1:256)
+    _TGATE=0;
+    TMR1=0;    // Reset timer Counter
+               // 40MHz Fcy --> 40000000/256 = 156250 pulses per second
+               //               So to generate 1ms divide by 1000
+    PR1=156;
+    _TON=1;    // Start Timer 1
+    _T1IE=1;    // Timer 1 interrupt Enable
+
+
+    //
+    // Setup I2C module
+    //
+
+
+
+	I2C1CONbits.A10M=0;
+	I2C1CONbits.SCLREL=1;
+	I2C1BRG=300;
+
+	I2C1ADD=0;
+	I2C1MSK=0;
+
+	I2C1CONbits.I2CEN=1;
+	IEC1bits.MI2C1IE = 1;
+  	IFS1bits.MI2C1IF = 0;
+    
+
+
 }
 
+
+void CONFIG_InitGlobals()
+{
+    UART_flagStart=0;
+    UART_Sending=0;
+    I2C_flagGyro=0;
+    I2C_State=0;
+    GYRO_State=0;
+    GYRO_Init=0;
+    TIMER_counter=1000;
+
+}
 
 
